@@ -20,6 +20,7 @@ app.use(cors());
 // Reads a JSON body onto req.body (only when Content-Type is application/json).
 app.use(express.json());
 
+/* ===== NOT NEEDED: these ran BEFORE the connect step, so they're repeated in the lesson block below =====
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ ok: true, db: mongoose.connection.readyState === 1 });
 });
@@ -57,7 +58,31 @@ app.use(
     res.status(500).json({ message: "Something went wrong" });
   },
 );
+*/
 
+// ===== SESSION 10: the line that makes this work on Vercel ===========
+// On your laptop, server.ts connects to MongoDB and only then starts
+// listening, so a request cannot arrive before the connection exists.
+// Deployed there is no server.ts step -- the app IS the function, and
+// a request is the first thing that happens. So the waiting moves
+// here, in front of every route.
+app.use(async (_req: Request, _res: Response, next: NextFunction) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err); // try/catch added so a failed connect reaches the error handler instead of hanging
+  }
+});
+app.get("/api/health", (_req: Request, res: Response) => {
+  res.json({ ok: true, db: mongoose.connection.readyState === 1 });
+});
+
+app.use("/api/auth", authRouter);
+app.use("/api/courses", courseRouter);
+app.use("/api/submissions", submissionRouter);
+
+// MOVED HERE: these must come after all routes.
 // Nothing above matched, so the URL does not exist. Without this, an
 // unknown path returns Express's own HTML error page, which is a
 // surprise for something that otherwise only ever speaks JSON.
@@ -98,23 +123,3 @@ app.use(
 // whole of the deployment configuration for this project, and it is
 // why there is no vercel.json in this repo.
 export default app;
-
-
-
-// ===== SESSION 10: the line that makes this work on Vercel ===========
-// On your laptop, server.ts connects to MongoDB and only then starts
-// listening, so a request cannot arrive before the connection exists.
-// Deployed there is no server.ts step -- the app IS the function, and
-// a request is the first thing that happens. So the waiting moves
-// here, in front of every route.
-app.use(async (_req: Request, _res: Response, next: NextFunction) => {
-  await connectDB();
-  next();
-});
-app.get("/api/health", (_req: Request, res: Response) => {
-  res.json({ ok: true, db: mongoose.connection.readyState === 1 });
-});
-
-app.use("/api/auth", authRouter);
-app.use("/api/courses", courseRouter);
-app.use("/api/submissions", submissionRouter);

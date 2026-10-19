@@ -47,6 +47,8 @@ export type SubmissionDoc = Omit<Submission, "id" | "studentId"> & {
   studentId: Types.ObjectId;
 };
 
+export type CourseDoc = Pick<Course, "code" | "title" | "units" | "semester">;
+
 // The body a client sends to create one. The server reads studentId off the
 // token instead of trusting the request.
 export type NewSubmissionBody = Pick<Submission, "courseCode" | "repoUrl">;

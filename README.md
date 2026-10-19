@@ -1,32 +1,24 @@
-# itelect4-backend
+## Live Deployment
 
-Express + MongoDB (Mongoose) + JWT backend for **itelect4-project-IT4B**
-(the frontend). Resource: `Submission`. Interfaces are copied from the
-frontend's `src/types/index.ts`.
+- **API base URL:** https://itelect4-backend-two.vercel.app
+- **Health check:** https://itelect4-backend-two.vercel.app/api/health
+  (returns `{"ok":true,"db":true}` when the database is connected)
+- **Frontend:** https://itelect4-project-it4b.vercel.app
 
-## Setup
+### Endpoints
 
-```bash
-npm install
-cp .env.example .env     # then fill in MONGODB_URI and JWT_SECRET
-npm run dev              # http://localhost:4000
-npm run build            # must finish with zero TypeScript errors
-```
+| Method | Path | Access |
+| --- | --- | --- |
+| GET | `/api/health` | Public |
+| POST | `/api/auth/register` | Public |
+| POST | `/api/auth/login` | Public |
+| GET | `/api/courses` | Public |
+| GET | `/api/courses/:code` | Public |
+| GET | `/api/submissions` | Requires token |
+| POST | `/api/submissions` | Requires token |
 
-`MONGODB_URI` must include the database name: `.../itelect4?retryWrites=true`.
-`.env` is in `.gitignore` -- never commit it.
+### Environment variables
 
-## Routes
-
-| Method and path             | Token | Answers                                  |
-| --------------------------- | ----- | ---------------------------------------- |
-| POST /api/auth/register     | no    | 201 and the user, without the password   |
-| POST /api/auth/login        | no    | 200 and `{ token, user }`                |
-| GET /api/submissions        | yes   | 200 and this user's rows, newest first   |
-| GET /api/submissions/:id    | yes   | 200 and one row, or 404                  |
-| POST /api/submissions       | yes   | 201 and the created row                  |
-| PATCH /api/submissions/:id  | yes   | 200 and the row after the change         |
-| DELETE /api/submissions/:id | yes   | 204, no body                             |
-
-Send `Authorization: Bearer <token>` on every protected route.
-
+- `MONGODB_URI` - MongoDB Atlas connection string
+- `JWT_SECRET` - secret used to sign login tokens (use whatever name your code reads)
+- `CORS_ORIGIN` - comma-separated allowed origins, e.g. `http://localhost:5173,https://itelect4-project-it4b.vercel.app`

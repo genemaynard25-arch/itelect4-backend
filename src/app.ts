@@ -63,6 +63,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/courses", courseRouter);
 app.use("/api/submissions", submissionRouter);
 
+// ===== SESSION 11: one more router, mounted like the other three ====
+// Private, rate limited, and the only route that talks to Gemini.
+app.use("/api/ai", aiRouter);
+
 // Nothing above matched, so the URL does not exist. Without this, an
 // unknown path returns Express's own HTML error page, which is a
 // surprise for something that otherwise only ever speaks JSON.
@@ -97,14 +101,6 @@ app.use(
     res.status(500).json({ message: "Something went wrong" });
   },
 );
-
-app.use("/api/auth", authRouter);
-app.use("/api/courses", courseRouter);
-app.use("/api/submissions", submissionRouter);
-
-// ===== SESSION 11: one more router, mounted like the other three ====
-// Private, rate limited, and the only route that talks to Gemini.
-app.use("/api/ai", aiRouter);
 
 // Vercel looks for an Express app in six places, and src/app.ts is one
 // of them. What it needs there is a default export -- that is the

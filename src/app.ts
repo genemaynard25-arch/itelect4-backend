@@ -11,6 +11,7 @@ import { connectDB } from "./config/db";
 import { authRouter } from "./routes/auth";
 import { courseRouter } from "./routes/courses";
 import { submissionRouter } from "./routes/submissions";
+import { aiRouter } from "./routes/ai";
 
 // This file builds the app and stops. It never opens a port and never
 // touches the database, so anything that wants an app -- server.ts, or
@@ -96,6 +97,14 @@ app.use(
     res.status(500).json({ message: "Something went wrong" });
   },
 );
+
+app.use("/api/auth", authRouter);
+app.use("/api/courses", courseRouter);
+app.use("/api/submissions", submissionRouter);
+
+// ===== SESSION 11: one more router, mounted like the other three ====
+// Private, rate limited, and the only route that talks to Gemini.
+app.use("/api/ai", aiRouter);
 
 // Vercel looks for an Express app in six places, and src/app.ts is one
 // of them. What it needs there is a default export -- that is the

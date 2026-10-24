@@ -4,6 +4,7 @@
 - **Health check:** https://itelect4-backend-two.vercel.app/api/health
   (returns `{"ok":true,"db":true}` when the database is connected)
 - **Frontend:** https://itelect4-project-it4b.vercel.app
+- **GitHub Frontend:** https://github.com/genemaynard25-arch/itelect4-project-IT4B
 
 ### Endpoints
 

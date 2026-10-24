@@ -22,3 +22,4 @@
 - `MONGODB_URI` - MongoDB Atlas connection string
 - `JWT_SECRET` - secret used to sign login tokens (use whatever name your code reads)
 - `CORS_ORIGIN` - comma-separated allowed origins, e.g. `http://localhost:5173,https://itelect4-project-it4b.vercel.app`
+- `GEMINI_API_KEY` - your gemini api key generated from `https://aistudio.google.com/api-keys`

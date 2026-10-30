@@ -7,7 +7,7 @@ import type { Review } from "../schemas/review";
 // now and the end of the semester. The cost: the model can change
 // underneath you, so the same prompt may answer a little differently
 // next month.
-export const MODEL = "gemini-flash-latest";
+export const MODEL = "gemini-flash-lite-latest";
 
 // The system prompt: the instructions that apply to EVERY request,
 // sent separately from what the student typed.
